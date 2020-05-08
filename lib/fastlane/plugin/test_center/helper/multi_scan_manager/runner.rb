@@ -41,6 +41,7 @@ module TestCenter
           return if @test_collector
 
           @test_collector = TestCenter::Helper::TestCollector.new(@options)
+          @options.reject! { |key| %i[testplan].include?(key) }
           @batch_count = @test_collector.test_batches.size
         end
 

@@ -228,7 +228,7 @@ module Fastlane
       end
 
       def self.prepare_scan_options_for_build_for_testing(scan_options)
-        build_options = scan_options.merge(build_for_testing: true).reject { |k| k == :test_without_building }
+        build_options = scan_options.merge(build_for_testing: true).reject { |k| %i[test_without_building, testplan].include?(k) }
         Scan.config = FastlaneCore::Configuration.create(
           Fastlane::Actions::ScanAction.available_options,
           ScanHelper.scan_options_from_multi_scan_options(build_options)
