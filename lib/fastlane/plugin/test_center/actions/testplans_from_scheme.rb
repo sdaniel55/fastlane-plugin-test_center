@@ -9,16 +9,19 @@ module Fastlane
           UI.user_error!("Error: cannot find any schemes in the Xcode workspace") if params[:workspace]
         end
 
-        testplan_path = nil
-        container_file  = params[:xcodeproj] || params[:workspace]
-        container_dir = File.dirname(container_file)
-
         testplan_paths = []
         scheme_filepaths.each do |scheme_filepath|
           UI.verbose("Looking in Scheme '#{scheme_filepath}' for any testplans")
           xcscheme = Xcodeproj::XCScheme.new(scheme_filepath)
+          next if xcscheme.test_action.nil?
+          next if xcscheme.test_action.testables.to_a.empty?
+          next if xcscheme.test_action.testables[0].buildable_references.to_a.empty?
+          next if xcscheme.test_action.test_plans.to_a.empty?
+
+          xcodeproj = xcscheme.test_action.testables[0].buildable_references[0].target_referenced_container.sub('container:', '')
+          container_dir = scheme_filepath.sub(/#{xcodeproj}.*/, '')
           xcscheme.test_action.test_plans.each do |testplan|
-            testplan_path = File.join(container_dir, testplan.target_referenced_container.sub('container:', ''))
+            testplan_path = File.absolute_path(File.join(container_dir, testplan.target_referenced_container.sub('container:', '')))
             UI.verbose("  found testplan '#{testplan_path}'")
             testplan_paths << testplan_path
           end
