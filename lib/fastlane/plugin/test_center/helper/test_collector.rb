@@ -39,9 +39,11 @@ module TestCenter
           }
         )
         testplans = Fastlane::Actions::TestplansFromSchemeAction.run(config)
+        FastlaneCore::UI.verbose("TestCollector found testplans: #{testplans}")
         testplan = testplans.find do |testplan_path|
           %r{(.*/?#{ options[:testplan] })\.xctestplan}.match?(testplan_path)
         end
+        FastlaneCore::UI.verbose("  using :testplan option, #{options[:testplan]}, using found one: #{testplan}")
 
         return if testplan.nil?
 
