@@ -240,7 +240,11 @@ module Fastlane
       end
 
       def self.update_xctestrun_after_build(scan_options)
-        xctestrun_files = Dir.glob("#{Scan.config[:derived_data_path]}/Build/Products/*.xctestrun")
+        glob_pattern = "#{Scan.config[:derived_data_path]}/Build/Products/*.xctestrun"
+        if scan_options[:testplan]
+          glob_pattern = "#{Scan.config[:derived_data_path]}/Build/Products/*#{scan_options[:testplan]}*.xctestrun"
+        end
+        xctestrun_files = Dir.glob(glob_pattern)
         UI.verbose("After building, found xctestrun files #{xctestrun_files} (choosing 1st)")
         scan_options[:xctestrun] = xctestrun_files.first
       end
