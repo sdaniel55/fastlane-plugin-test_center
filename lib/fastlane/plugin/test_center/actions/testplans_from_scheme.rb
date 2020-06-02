@@ -60,7 +60,7 @@ module Fastlane
         [
           FastlaneCore::ConfigItem.new(
             key: :xcodeproj,
-	    env_name: "FL_TESTPLANS_FROM_SCHEME_XCODE_PROJECT",
+            env_name: "FL_TESTPLANS_FROM_SCHEME_XCODE_PROJECT",
             optional: true,
             description: "The file path to the Xcode project file that references the Scheme",
             verify_block: proc do |path|

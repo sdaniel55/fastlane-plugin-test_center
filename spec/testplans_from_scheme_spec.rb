@@ -45,7 +45,7 @@ module Fastlane::Actions
       end
     end
 
-    describe '::run' do
+    describe ':run' do
       it 'raises an error if the given scheme does not exist' do
         allow(Dir).to receive(:exist?).with(%r{.*path/to/pony.xcworkspace}).and_return(true)
         fastfile = "lane :test do
@@ -68,7 +68,6 @@ module Fastlane::Actions
             scheme: 'HappyHelper'
           )
         end"
-        # TODO: consider if we should check for multiple matching schemes and chose first?
         mock_scheme_filepaths = [
           'path/to/TestProject.xcodeproj/HappyHelper.xcscheme'
         ]
@@ -122,7 +121,6 @@ module Fastlane::Actions
         result = Fastlane::FastFile.new.parse(fastfile).runner.execute(:test)
         expect(result).to eq([])
       end
-
     end
   end
 end
