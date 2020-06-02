@@ -69,7 +69,7 @@ module Fastlane
               UI.user_error!("Error: Xcode project '#{path}' not found!") unless Dir.exist?(path)
             end
           ),
-	  FastlaneCore::ConfigItem.new(
+          FastlaneCore::ConfigItem.new(
             key: :workspace,
             env_name: "FL_TESTPLANS_FROM_SCHEME_XCODE_WORKSPACE",
             optional: true,
@@ -80,7 +80,7 @@ module Fastlane
               UI.user_error!("Error: Workspace file is not a workspace, must end with .xcworkspace") unless v.include?(".xcworkspace")
             end
           ),
-	  FastlaneCore::ConfigItem.new(
+          FastlaneCore::ConfigItem.new(
             key: :scheme,
             optional: true,
             env_name: "FL_TESTPLANS_FROM_SCHEME_XCODE_SCHEME",
