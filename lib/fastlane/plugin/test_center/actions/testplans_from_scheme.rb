@@ -8,7 +8,6 @@ module Fastlane
           UI.user_error!("Error: cannot find any schemes in the Xcode project") if params[:xcodeproj]
           UI.user_error!("Error: cannot find any schemes in the Xcode workspace") if params[:workspace]
         end
-
         testplan_paths = []
         scheme_filepaths.each do |scheme_filepath|
           UI.verbose("Looking in Scheme '#{scheme_filepath}' for any testplans")

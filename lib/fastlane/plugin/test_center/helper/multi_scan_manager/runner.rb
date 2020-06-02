@@ -1,4 +1,3 @@
-
 module TestCenter
   module Helper
     module MultiScanManager

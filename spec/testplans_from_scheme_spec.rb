@@ -70,12 +70,22 @@ module Fastlane::Actions
         end"
         # TODO: consider if we should check for multiple matching schemes and chose first?
         mock_scheme_filepaths = [
-          'path/to/HappyHelper.xcscheme'
+          'path/to/TestProject.xcodeproj/HappyHelper.xcscheme'
         ]
         allow(Fastlane::Actions::TestplansFromSchemeAction).to receive(:schemes_from_project).and_return(mock_scheme_filepaths)
         mock_scheme = OpenStruct.new
         allow(Xcodeproj::XCScheme).to receive(:new).and_return(mock_scheme)
-        mock_test_action = OpenStruct.new
+        mock_test_action = OpenStruct.new(
+          testables: [
+            OpenStruct.new(
+              buildable_references: [
+                OpenStruct.new(
+                  target_referenced_container: 'container:TestProject.xcodeproj'
+                )
+              ]
+            )
+          ]
+        )
         allow(mock_scheme).to receive(:test_action).and_return(mock_test_action)
         mock_test_plans = [
           OpenStruct.new(
@@ -87,12 +97,8 @@ module Fastlane::Actions
         ]
         allow(mock_test_action).to receive(:test_plans).and_return(mock_test_plans)
         result = Fastlane::FastFile.new.parse(fastfile).runner.execute(:test)
-        expect(result).to eq(
-          [
-            'path/to/testPlan1.xctestplan',
-            'path/to/OldTestPlans/testPlan2.xctestplan'
-          ]
-        )
+        expect(result[0]).to match(%r{path/to/testPlan1.xctestplan})
+        expect(result[1]).to match(%r{path/to/OldTestPlans/testPlan2.xctestplan})
       end
 
       it 'returns an empty list if no testplans exist' do
